@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:background="@drawable/bgrepeat"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.ayushimathur.tabsandlistview.SelectArtist">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rejectList"
+            android:src="@drawable/rejected_list_ic"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/favList"
+            android:src="@drawable/favlist_ic"
+            android:layout_gravity="right"
+            android:layout_marginLeft="300dp"/>
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name here"
+        android:textSize="25sp"
+        android:textColor="@color/outSideTitle"
+        android:id="@+id/artistName"
+        android:layout_centerHorizontal="true"/>
+
+
+
+
+    <ImageView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="400px"
+        android:id="@+id/artistphoto"
+        />
+
+
+
+<RelativeLayout
+    android:paddingTop="30dp"
+    android:layout_centerHorizontal="true"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/artistphoto"
+    android:id="@+id/playgrp">
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:src="@drawable/play_btn"
+        android:id="@+id/btnplay"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        />
+    <ImageView
+        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:src="@drawable/pause_btn"
+        android:id="@+id/btnpause"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:src="@drawable/rewind_right_btn"
+        android:id="@+id/btnskipRight"
+        android:layout_alignParentRight="true"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:src="@drawable/rewind_left_btn"
+        android:id="@+id/btnskipLeft"
+        android:layout_alignParentLeft="true"
+        />
+
+</RelativeLayout>
+
+
+    <LinearLayout
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playgrp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="56dp"
+        >
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playgrp"
+        android:layout_centerInParent="true"
+        android:id="@+id/heartlayout">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/cross"
+            android:id="@+id/btncross"
+            android:layout_marginRight="50dp"
+            />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/crossblack"
+            android:id="@+id/btncrossAfter"
+            android:layout_marginRight="50dp"
+            />
+
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="100dp"
+            android:src="@drawable/heart_ic"
+            android:layout_centerInParent="true"
+            android:id="@+id/btnheartAfter"
+            android:layout_marginLeft="50dp"
+            />
+
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/heart_white"
+            android:id="@+id/btnheart"
+            android:layout_marginLeft="50dp"
+            />
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

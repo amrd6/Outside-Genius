@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ayushimathur.tabsandlistview"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <uses-sdk android:minSdkVersion="8" />
+
+    <!-- Internet Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".Splash"
+            android:label="@string/app_name"
+            android:theme="@style/splashScreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".OnBoard" />
+        <activity android:name=".SelectArtist"/>
+        <activity android:name=".AndroidTabAndListView" />
+        <activity android:name=".RejectedArtistsLists" />
+        <activity android:name=".MainActivity" />
+
+        <!-- Inbox Activity -->
+        <activity android:name=".FavDay1" />
+
+        <!-- Outbox Activity -->
+        <activity android:name=".FavDay2" />
+
+        <!-- Profile Activity -->
+        <activity android:name=".FavDay3" />
+
+        <!-- Inbox Activity -->
+        <activity android:name=".RejDay1" />
+
+        <!-- Outbox Activity -->
+        <activity android:name=".RejDay2" />
+
+        <!-- Profile Activity -->
+        <activity android:name=".RejDay3" />
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+
+    </application>
+
+</manifest>
