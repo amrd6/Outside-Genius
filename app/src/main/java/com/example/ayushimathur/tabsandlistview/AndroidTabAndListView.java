@@ -4,8 +4,11 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.graphics.Color;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -32,9 +35,20 @@ public class AndroidTabAndListView extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         TabHost tabHost = getTabHost();
+        ImageView home = (ImageView) findViewById(R.id.homebtn);
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), OnBoard.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // Inbox Tab
         TabSpec inboxSpec = tabHost.newTabSpec(INBOX_SPEC);
+
         // Tab Icon
         inboxSpec.setIndicator(INBOX_SPEC, getResources().getDrawable(R.drawable.icon_inbox));
         Intent inboxIntent = new Intent(this, FavDay1.class);
@@ -43,7 +57,7 @@ public class AndroidTabAndListView extends TabActivity {
 
         // Outbox Tab
         TabSpec outboxSpec = tabHost.newTabSpec(OUTBOX_SPEC);
-        outboxSpec.setIndicator(OUTBOX_SPEC, getResources().getDrawable(R.drawable.icon_outbox));
+        outboxSpec.setIndicator(OUTBOX_SPEC, getResources().getDrawable(R.drawable.bitmap));
         Intent outboxIntent = new Intent(this, FavDay2.class);
         outboxSpec.setContent(outboxIntent);
 

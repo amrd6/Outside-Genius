@@ -1,11 +1,14 @@
 package com.example.ayushimathur.tabsandlistview;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.LocaleDisplayNames;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,12 +40,15 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 
 public class SelectArtist extends AppCompatActivity {
-    JSONArray m_jArry = OnBoard.artistList;
-
     TextView artname;
+    JSONObject m_jArry;
+    JSONArray obj;
+    private boolean intialStage = true;
+
     public static JSONArray lovedArtists1 = new JSONArray();
     public static JSONArray lovedArtists2 = new JSONArray();
     public static JSONArray lovedArtists3 = new JSONArray();
@@ -50,7 +56,6 @@ public class SelectArtist extends AppCompatActivity {
     public static JSONArray rejectedArtists2 = new JSONArray();
     public static JSONArray rejectedArtists3 = new JSONArray();
     MediaPlayer player = new MediaPlayer();
-    int numTaps = 0;
     int songplaying = 0;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -66,9 +71,7 @@ public class SelectArtist extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_select_artist);
         artname = (TextView) findViewById(R.id.artistName);
 
@@ -108,8 +111,6 @@ public class SelectArtist extends AppCompatActivity {
             }
         });
 
-        setUpImageAndSong();
-
 
         //   Collection
         btnheart.setOnClickListener(new View.OnClickListener() {
@@ -119,35 +120,37 @@ public class SelectArtist extends AppCompatActivity {
                 String artist;
                 String date = "";
                 try {
-                    jo_inside = m_jArry.getJSONObject(songplaying);
+                    jo_inside = obj.getJSONObject(songplaying);
                     date = jo_inside.getString("start_time");
                     artist = jo_inside.getString("artist");
-                if(date.contains("2016-08-05")) {
-                    if (!userexists(lovedArtists1, artist)) {
-                        lovedArtists1.put(jo_inside);
+                    if(date.contains("2016-08-05")) {
+                        Log.d("lenfavlistb ", Integer.toString(lovedArtists1.length()));
+                        if (!userexists(lovedArtists1, artist)) {
+                            lovedArtists1.put(jo_inside);
+                        }
+                        Log.d("lenfavlista ", Integer.toString(lovedArtists1.length()));
+                        if (userexists(rejectedArtists1, artist)) {
+                            rejectedArtists1.remove(songplaying);
+                        }
                     }
-                    if (userexists(rejectedArtists1, artist)) {
-                        rejectedArtists1.remove(songplaying);
-                    }
-                }
 
-                if(date.contains("2016-08-06")) {
-                    if (!userexists(lovedArtists2, artist)) {
-                        lovedArtists2.put(jo_inside);
+                    if(date.contains("2016-08-06")) {
+                        if (!userexists(lovedArtists2, artist)) {
+                            lovedArtists2.put(jo_inside);
+                        }
+                        if (userexists(rejectedArtists2, artist)) {
+                            rejectedArtists2.remove(songplaying);
+                        }
                     }
-                    if (userexists(rejectedArtists2, artist)) {
-                        rejectedArtists2.remove(songplaying);
-                    }
-                }
 
-                if(date.contains("2016-08-07")) {
-                    if (!userexists(lovedArtists3, artist)) {
-                        lovedArtists3.put(jo_inside);
+                    if(date.contains("2016-08-07")) {
+                        if (!userexists(lovedArtists3, artist)) {
+                            lovedArtists3.put(jo_inside);
+                        }
+                        if (userexists(rejectedArtists3, artist)) {
+                            rejectedArtists3.remove(songplaying);
+                        }
                     }
-                    if (userexists(rejectedArtists3, artist)) {
-                        rejectedArtists3.remove(songplaying);
-                    }
-                }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -167,24 +170,24 @@ public class SelectArtist extends AppCompatActivity {
                 String artist;
                 String date = "";
                 try {
-                    jo_inside = m_jArry.getJSONObject(songplaying);
+                    jo_inside = obj.getJSONObject(songplaying);
                     date = jo_inside.getString("start_time");
                     artist = jo_inside.getString("artist");
-                if(date.contains("2016-08-07")) {
-                    if (userexists(lovedArtists3, artist)) {
-                        lovedArtists3.remove(songplaying);
+                    if(date.contains("2016-08-07")) {
+                        if (userexists(lovedArtists3, artist)) {
+                            lovedArtists3.remove(songplaying);
+                        }
                     }
-                }
-                if(date.contains("2016-08-06")) {
-                    if (userexists(lovedArtists2, artist)) {
-                        lovedArtists2.remove(songplaying);
+                    if(date.contains("2016-08-06")) {
+                        if (userexists(lovedArtists2, artist)) {
+                            lovedArtists2.remove(songplaying);
+                        }
                     }
-                }
-                if(date.contains("2016-08-05")) {
-                    if (userexists(lovedArtists1, artist)) {
-                        lovedArtists1.remove(songplaying);
+                    if(date.contains("2016-08-05")) {
+                        if (userexists(lovedArtists1, artist)) {
+                            lovedArtists1.remove(songplaying);
+                        }
                     }
-                }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -197,42 +200,42 @@ public class SelectArtist extends AppCompatActivity {
         btnCross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    JSONObject jo_inside;
-                    String artist;
-                    String date = "";
-                    try {
-                        jo_inside = m_jArry.getJSONObject(songplaying);
-                        date = jo_inside.getString("start_time");
-                        artist = jo_inside.getString("artist");
-                if(date.contains("2016-08-07")) {
-                    if (!userexists(rejectedArtists3, artist)) {
-                        rejectedArtists3.put(jo_inside);
+                JSONObject jo_inside;
+                String artist;
+                String date = "";
+                try {
+                    jo_inside = obj.getJSONObject(songplaying);
+                    date = jo_inside.getString("start_time");
+                    artist = jo_inside.getString("artist");
+                    if(date.contains("2016-08-07")) {
+                        if (!userexists(rejectedArtists3, artist)) {
+                            rejectedArtists3.put(jo_inside);
+                        }
+                        if (userexists(lovedArtists3, artist)) {
+                            lovedArtists3.remove(songplaying);
+                        }
                     }
-                    if (userexists(lovedArtists3, artist)) {
-                        lovedArtists3.remove(songplaying);
-                    }
-                }
 
-                if(date.contains("2016-08-06")) {
-                    if (!userexists(rejectedArtists2, artist)) {
-                        rejectedArtists2.put(jo_inside);
+                    if(date.contains("2016-08-06")) {
+                        if (!userexists(rejectedArtists2, artist)) {
+                            rejectedArtists2.put(jo_inside);
+                        }
+                        if (userexists(lovedArtists2, artist)) {
+                            lovedArtists2.remove(songplaying);
+                        }
                     }
-                    if (userexists(lovedArtists2, artist)) {
-                        lovedArtists2.remove(songplaying);
-                    }
-                }
 
-                if(date.contains("2016-08-05")) {
-                    if (!userexists(rejectedArtists1, artist)) {
-                        rejectedArtists1.put(jo_inside);
+                    if(date.contains("2016-08-05")) {
+                        if (!userexists(rejectedArtists1, artist)) {
+                            rejectedArtists1.put(jo_inside);
+                        }
+                        if (userexists(lovedArtists1, artist)) {
+                            lovedArtists1.remove(songplaying);
+                        }
                     }
-                    if (userexists(lovedArtists1, artist)) {
-                        lovedArtists1.remove(songplaying);
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
                 btnCrossAfter.setVisibility(View.VISIBLE);
                 btnCross.setVisibility(View.GONE);
 
@@ -248,24 +251,24 @@ public class SelectArtist extends AppCompatActivity {
                 String artist;
                 String date = "";
                 try {
-                    jo_inside = m_jArry.getJSONObject(songplaying);
+                    jo_inside = obj.getJSONObject(songplaying);
                     date = jo_inside.getString("start_time");
                     artist = jo_inside.getString("artist");
-                if(date.contains("2016-08-07")) {
-                    if (userexists(rejectedArtists3, artist)) {
-                        rejectedArtists3.remove(songplaying);
+                    if(date.contains("2016-08-07")) {
+                        if (userexists(rejectedArtists3, artist)) {
+                            rejectedArtists3.remove(songplaying);
+                        }
                     }
-                }
-                if(date.contains("2016-08-06")) {
-                    if (userexists(rejectedArtists2, artist)) {
-                        rejectedArtists2.remove(songplaying);
+                    if(date.contains("2016-08-06")) {
+                        if (userexists(rejectedArtists2, artist)) {
+                            rejectedArtists2.remove(songplaying);
+                        }
                     }
-                }
-                if(date.contains("2016-08-05")) {
-                    if (userexists(rejectedArtists1, artist)) {
-                        rejectedArtists1.remove(songplaying);
+                    if(date.contains("2016-08-05")) {
+                        if (userexists(rejectedArtists1, artist)) {
+                            rejectedArtists1.remove(songplaying);
+                        }
                     }
-                }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -278,12 +281,13 @@ public class SelectArtist extends AppCompatActivity {
         btnskipRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (songplaying < m_jArry.length()-2) {
+                if (songplaying < obj.length()-1) {
                     songplaying++;
+                    player.reset();
                     setUpImageAndSong();
                 }   else {
                     Intent intent = new Intent(view.getContext(), AndroidTabAndListView.class);
-                    player.stop();
+                    player.reset();
                     player.release();
                     startActivity(intent);
                     finish();
@@ -294,8 +298,9 @@ public class SelectArtist extends AppCompatActivity {
         btnskipLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (songplaying > 1) {
+                if (songplaying > 0) {
                     songplaying--;
+                    player.reset();
                     setUpImageAndSong();
                     btnheart.setVisibility(View.VISIBLE);
                     btnheartAfter.setVisibility(View.GONE);
@@ -340,48 +345,71 @@ public class SelectArtist extends AppCompatActivity {
             }
         });
 
-        ImageView img1 = (ImageView) findViewById(R.id.artistphoto);
-        Bitmap bm = BitmapFactory.decodeResource(getResources(),
-                R.drawable.ic_launcher);
-        Bitmap conv_bm = getRoundedBitmap(bm);
-        img1.setImageBitmap(conv_bm);
-        artname.setText("");
+        try {
+            obj = new JSONArray(loadJSONFromAsset());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        player=new MediaPlayer();
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        setUpImageAndSong();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getResources().openRawResource(R.raw.schedule);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
     private boolean userexists(JSONArray jsonArray, String usernameToFind){
-        return jsonArray.toString().contains("\"username\":\""+usernameToFind+"\"");
+        Log.d("user exists big string ", jsonArray.toString());
+        Log.d("search artist ", usernameToFind);
+        boolean ifexists =  jsonArray.toString().contains(usernameToFind);
+        Log.d("if exists ", Boolean.toString(ifexists));
+        return ifexists;
     }
 
     private void setUpImageAndSong() {
         try {
-            JSONObject jo_inside = m_jArry.getJSONObject(songplaying);
+            Log.d("songplaying index", Integer.toString(songplaying));
+            JSONObject jo_inside = obj.getJSONObject(songplaying);
             String artistName = jo_inside.getString("artist");
             String imgName = jo_inside.getString("big_image_url");
             String song_url = jo_inside.getString("song_url");
 
             artname.setText(artistName);
 
-            try {
-                player.setDataSource(song_url);
-                player.prepare();
-            } catch (IOException e) {
-                Log.e("", "prepare() failed");
-            }
+            Log.d("sonag name",song_url);
+            //Uri uri = Uri.parse(song_url);
+
+            new Player().execute(song_url);
+            //  player.prepareAsync();
 
             ImageView imgv = (ImageView) findViewById(R.id.artistphoto);
             imgName = "a" + imgName ;
-            int id2 =getResources().getIdentifier(imgName, "drawable", getPackageName());
+            Log.d("image name", imgName);
+            int id2 = getResources().getIdentifier(imgName, "raw", getPackageName());
             imgv.setImageResource(id2);
-    }
+        }
         catch (JSONException e){
 
         }
-        player.setLooping(true);
-        player.start();
 
         btnpause.setVisibility(View.VISIBLE);
         btnplay.setVisibility(View.GONE);
@@ -393,26 +421,6 @@ public class SelectArtist extends AppCompatActivity {
         btnCrossAfter.setVisibility(View.GONE);
     }
 
-    public static Bitmap getRoundedBitmap(Bitmap bitmap) {
-        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(output);
-
-        final int color = Color.RED;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawOval(rectF, paint);
-        paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        bitmap.recycle();
-
-        return output;
-    }
 
     @Override
     public void onStart() {
@@ -454,8 +462,88 @@ public class SelectArtist extends AppCompatActivity {
         client.disconnect();
     }
 
-    
+    /**
+     * preparing mediaplayer will take sometime to buffer the content so prepare it inside the background thread and starting it on UI thread.
+     * @author piyush
+     *
+     */
+
+    class Player extends AsyncTask<String, Void, Boolean> {
+        private ProgressDialog progress;
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Boolean prepared;
+            try {
+
+                player.setDataSource(params[0]);
+                player.setLooping(true);
+                player.prepare();
+                prepared = true;
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                Log.d("IllegarArgument", e.getMessage());
+                prepared = false;
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                // TODO Auto-generated catch block
+                prepared = false;
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                // TODO Auto-generated catch block
+                prepared = false;
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                prepared = false;
+                e.printStackTrace();
+            }
+            return prepared;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            if (progress.isShowing()) {
+                progress.cancel();
+            }
+            Log.d("Prepared", "//" + result);
+            player.start();
+
+            intialStage = false;
+        }
+
+        public Player() {
+            progress = new ProgressDialog(SelectArtist.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            this.progress.setMessage("Buffering...");
+            this.progress.show();
+
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        if (player != null) {
+//                player.stop();
+            player.release();
+            player = null;
+        }
+    }
+
+
 }
+
+
 
 
 

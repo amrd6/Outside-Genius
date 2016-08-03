@@ -2,8 +2,11 @@ package com.example.ayushimathur.tabsandlistview;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
@@ -32,6 +35,17 @@ public class RejectedArtistsLists extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         TabHost tabHost = getTabHost();
+
+        ImageView home = (ImageView) findViewById(R.id.homebtn);
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), OnBoard.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // Inbox Tab
         TabSpec inboxSpec = tabHost.newTabSpec(INBOX_SPEC);

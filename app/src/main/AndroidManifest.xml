@@ -28,8 +28,8 @@
         </activity>
         <activity android:name=".OnBoard" />
         <activity android:name=".SelectArtist"/>
-        <activity android:name=".AndroidTabAndListView" />
-        <activity android:name=".RejectedArtistsLists" />
+        <activity android:name=".AndroidTabAndListView"/>
+        <activity android:name=".RejectedArtistsLists"/>
         <activity android:name=".MainActivity" />
 
         <!-- Inbox Activity -->
